@@ -1,0 +1,36 @@
+# Output files
+output/
+*.csv
+*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Playwright
+.playwright/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+
+
+
+
+# NTU GPU files (private)
+NTU_GPU/
+.env

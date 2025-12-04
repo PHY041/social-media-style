@@ -1,0 +1,18 @@
+# Docker ignore
+.git
+.gitignore
+.env
+*.pyc
+__pycache__
+*.egg-info
+.pytest_cache
+.mypy_cache
+venv/
+.venv/
+output/
+*.csv
+*.parquet
+*.log
+.DS_Store
+Thumbs.db
+

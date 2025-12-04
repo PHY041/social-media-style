@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "description": "Nano Banana Pro Prompt 写作框架 - 从 1648 条 prompt 中提取的结构",
+    "purpose": "学习如何写 prompt，不是学习具体内容",
+    "created_at": "2025-11-29"
+  },
+  
+  "writing_framework": {
+    "elements": [
+      {
+        "order": 1,
+        "name": "主体/Subject",
+        "importance": "必须",
+        "description": "画面的主要对象",
+        "sub_elements": ["人物特征", "年龄", "性别", "表情", "姿态", "物体", "动物"],
+        "keywords_cn": ["人物", "角色", "主角", "对象", "主体"],
+        "keywords_en": ["subject", "character", "person", "object", "figure"]
+      },
+      {
+        "order": 2,
+        "name": "场景/Setting",
+        "importance": "必须",
+        "description": "环境和背景",
+        "sub_elements": ["室内/室外", "具体地点", "时间", "天气", "道具", "装饰"],
+        "keywords_cn": ["场景", "背景", "环境", "地点", "位置"],
+        "keywords_en": ["setting", "background", "environment", "location", "scene"]
+      },
+      {
+        "order": 3,
+        "name": "风格/Style",
+        "importance": "重要",
+        "description": "艺术风格和美学",
+        "sub_elements": ["艺术流派", "参考艺术家", "画风", "时代感"],
+        "keywords_cn": ["风格", "艺术", "画风", "美学"],
+        "keywords_en": ["style", "aesthetic", "art style", "artistic"],
+        "common_values": ["写实", "卡通", "动漫", "3D", "像素", "油画", "水彩", "极简", "复古", "赛博朋克", "蒸汽朋克"]
+      },
+      {
+        "order": 4,
+        "name": "光线/Lighting",
+        "importance": "重要",
+        "description": "光线和色调氛围",
+        "sub_elements": ["光源方向", "光线强度", "色温", "阴影", "高光"],
+        "keywords_cn": ["光线", "光影", "照明", "氛围", "色调"],
+        "keywords_en": ["lighting", "light", "mood", "atmosphere", "tone"],
+        "common_values": ["自然光", "逆光", "侧光", "柔和", "戏剧性", "暖色调", "冷色调", "金色时刻"]
+      },
+      {
+        "order": 5,
+        "name": "构图/Composition",
+        "importance": "重要",
+        "description": "镜头和视角",
+        "sub_elements": ["景别", "角度", "比例", "透视"],
+        "keywords_cn": ["构图", "镜头", "角度", "视角", "比例"],
+        "keywords_en": ["composition", "camera", "angle", "perspective", "framing"],
+        "common_values": ["特写", "中景", "远景", "俯视", "仰视", "平视", "16:9", "1:1", "3:4", "黄金分割"]
+      },
+      {
+        "order": 6,
+        "name": "细节/Details",
+        "importance": "可选",
+        "description": "质感和细节",
+        "sub_elements": ["材质", "纹理", "服装", "配饰", "表情细节"],
+        "keywords_cn": ["细节", "质感", "纹理", "材质", "精细"],
+        "keywords_en": ["detail", "texture", "material", "quality", "intricate"]
+      },
+      {
+        "order": 7,
+        "name": "技术参数/Technical",
+        "importance": "可选",
+        "description": "输出质量参数",
+        "sub_elements": ["分辨率", "清晰度", "景深"],
+        "keywords_cn": ["分辨率", "高清", "8K", "4K", "景深", "焦距"],
+        "keywords_en": ["resolution", "8K", "4K", "HDR", "depth of field", "sharp"]
+      },
+      {
+        "order": 8,
+        "name": "负面提示/Negative",
+        "importance": "可选",
+        "description": "需要避免的元素",
+        "sub_elements": ["避免的风格", "避免的瑕疵", "排除的元素"],
+        "keywords_cn": ["负面", "避免", "不要", "排除"],
+        "keywords_en": ["negative", "avoid", "exclude", "no", "without"]
+      }
+    ]
+  },
+
+  "templates_by_category": {
+    "人物/肖像": {
+      "priority": ["主体", "光线", "构图", "风格", "细节"],
+      "template": "[人物描述：年龄/性别/外貌/表情/姿态]，[场景]，[光线：方向/强度/色温]，[构图：景别/角度]，[风格]，[质量参数]"
+    },
+    "风景/场景": {
+      "priority": ["场景", "氛围", "构图", "风格", "光线"],
+      "template": "[场景描述：地点/时间/天气]，[氛围：情绪/色调]，[构图：视角/比例]，[风格]，[细节元素]"
+    },
+    "产品/商业": {
+      "priority": ["主体", "光线", "背景", "质感", "构图"],
+      "template": "[产品描述：类型/材质/颜色]，[光线：专业产品照明]，[背景：简洁/场景化]，[质感细节]，[构图]"
+    },
+    "艺术/插画": {
+      "priority": ["风格", "主体", "色调", "细节", "氛围"],
+      "template": "[艺术风格：具体流派/参考艺术家]，[主体描述]，[色彩方案]，[细节程度]，[整体氛围]"
+    },
+    "UI/设计": {
+      "priority": ["布局", "风格", "色彩", "文字", "细节"],
+      "template": "[设计类型：UI/海报/Logo]，[布局结构]，[色彩方案]，[字体风格]，[整体风格]"
+    }
+  },
+
+  "common_keywords": {
+    "quality": ["8K", "高清", "超写实", "细节丰富", "专业", "精细"],
+    "style": ["写实", "卡通", "动漫", "3D渲染", "像素", "水彩", "油画", "极简", "复古", "赛博朋克"],
+    "lighting": ["自然光", "柔和光", "戏剧性光影", "逆光", "侧光", "金色时刻", "蓝调时刻"],
+    "composition": ["特写", "中景", "远景", "全身", "半身", "俯视", "仰视", "对称", "三分法"],
+    "mood": ["温暖", "冷峻", "梦幻", "神秘", "活力", "宁静", "戏剧性", "怀旧"]
+  },
+
+  "usage_notes": {
+    "how_to_use": [
+      "1. 根据图片类型选择对应的模板",
+      "2. 按优先级填充各个元素",
+      "3. 使用对应的关键词",
+      "4. 具体内容由你的审美和需求决定"
+    ],
+    "important": "这个框架告诉你 '写什么'，但 '写什么内容' 要根据你自己的审美标准来填充"
+  }
+}
+
+
+

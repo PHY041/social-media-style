@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "version": "2.0",
+    "description": "VLM 图片分析输出结构 - 结构化字段 + 自由描述",
+    "created_at": "2025-12-04",
+    "note": "结构化字段用于搜索筛选，自由描述用于生成 Prompt"
+  },
+
+  "output_schema": {
+    
+    "product": {
+      "description": "产品分类（如果图片有产品）",
+      "fields": {
+        "category_l1": "string | 大类: fashion, beauty, home, electronics, food, lifestyle, other, none",
+        "category_l2": "string | 中类: bags, shoes, skincare, furniture...",
+        "category_l3": "string | 小类: crossbody_bag, sneakers, serum...",
+        "material": "string | 材质: leather, canvas, glass, metal, fabric...",
+        "price_tier": "string | luxury, premium, mid_range, budget",
+        "target_demographic": "string | female, male, unisex, kids, all"
+      }
+    },
+
+    "composition": {
+      "description": "构图和布局（结构化）",
+      "fields": {
+        "camera_angle": "string | flat_lay, eye_level, low_angle, overhead, 45_degree, three_quarter",
+        "subject_position": "string | center, rule_of_thirds, corner, scattered, floating",
+        "negative_space": "string | minimal, moderate, generous",
+        "framing": "string | tight_crop, medium, wide, environmental"
+      }
+    },
+
+    "lighting": {
+      "description": "光线类型（结构化）",
+      "fields": {
+        "type": "string | soft_diffused, hard_shadow, natural, studio, golden_hour, dramatic, flat, rim",
+        "direction": "string | front, side, back, overhead, multi_point",
+        "shadow": "string | none, soft, medium, hard",
+        "temperature": "string | warm, cool, neutral"
+      }
+    },
+
+    "color": {
+      "description": "色彩信息（结构化）",
+      "fields": {
+        "dominant_colors": "array | 主要颜色名称 2-4个",
+        "tone": "string | warm, cool, neutral, mixed",
+        "saturation": "string | muted, natural, vibrant",
+        "contrast": "string | low, medium, high"
+      }
+    },
+
+    "style": {
+      "description": "风格分类（结构化，用于搜索）",
+      "fields": {
+        "primary_style": "string | minimalist, luxury, bohemian, modern, vintage, edgy, romantic, sporty, streetwear, editorial, commercial",
+        "cultural_aesthetic": "string | neo_chinese, japanese, scandinavian, mediterranean, american, korean, none",
+        "professional_level": "string | editorial, commercial, prosumer, ugc"
+      }
+    },
+
+    "commercial": {
+      "description": "商业适用性（结构化）",
+      "fields": {
+        "best_industries": "array | 最适合的行业 2-4个: fashion, beauty, food, tech, home, lifestyle...",
+        "best_occasions": "array | 最适合的场合 1-3个: everyday, holiday, sale, launch, seasonal...",
+        "brand_tier_fit": "string | luxury, premium, mass_market, budget"
+      }
+    },
+
+    "platform_fit": {
+      "description": "平台适配度 (0-1)",
+      "fields": {
+        "instagram_feed": "float",
+        "instagram_story": "float", 
+        "pinterest": "float",
+        "xiaohongshu": "float",
+        "tiktok_cover": "float",
+        "ecommerce": "float",
+        "paid_ads": "float"
+      }
+    },
+
+    "text_safe_zones": {
+      "description": "文字叠加信息",
+      "fields": {
+        "has_existing_text": "boolean",
+        "safe_zones": "array | 适合放文字的区域 [top, bottom, left, right, center]",
+        "logo_placement_viable": "boolean"
+      }
+    },
+
+    "searchable_tags": {
+      "description": "综合搜索标签",
+      "fields": {
+        "tags": "array | 10-15个可搜索标签，涵盖风格、颜色、产品、氛围等"
+      }
+    },
+
+    "descriptions": {
+      "description": "自由描述（VLM 自己写，用于生成 Prompt）",
+      "fields": {
+        "composition_desc": "string | 构图描述，2-3句话",
+        "lighting_desc": "string | 光线描述，1-2句话", 
+        "color_mood_desc": "string | 色彩和氛围描述，2-3句话",
+        "style_desc": "string | 风格特点描述，2-3句话",
+        "unique_elements": "string | 这张图的独特之处，1-2句话"
+      }
+    },
+
+    "generated_prompt": {
+      "description": "VLM 直接生成的 Prompt（按结构顺序）",
+      "fields": {
+        "prompt_en": "string | 英文 Prompt，按 TYPE→SUBJECT→COMPOSITION→BACKGROUND→LIGHTING→COLOR→STYLE→QUALITY 顺序",
+        "negative_prompt": "string | 负面提示词"
+      }
+    }
+  },
+
+  "example_output": {
+    "product": {
+      "category_l1": "fashion",
+      "category_l2": "bags",
+      "category_l3": "crossbody_bag",
+      "material": "leather",
+      "price_tier": "luxury",
+      "target_demographic": "female"
+    },
+    "composition": {
+      "camera_angle": "45_degree",
+      "subject_position": "center",
+      "negative_space": "generous",
+      "framing": "medium"
+    },
+    "lighting": {
+      "type": "soft_diffused",
+      "direction": "side",
+      "shadow": "soft",
+      "temperature": "warm"
+    },
+    "color": {
+      "dominant_colors": ["cream", "caramel", "gold"],
+      "tone": "warm",
+      "saturation": "muted",
+      "contrast": "medium"
+    },
+    "style": {
+      "primary_style": "minimalist",
+      "cultural_aesthetic": "none",
+      "professional_level": "commercial"
+    },
+    "commercial": {
+      "best_industries": ["fashion", "luxury_goods", "lifestyle"],
+      "best_occasions": ["everyday", "gift_guide"],
+      "brand_tier_fit": "luxury"
+    },
+    "platform_fit": {
+      "instagram_feed": 0.95,
+      "instagram_story": 0.7,
+      "pinterest": 0.9,
+      "xiaohongshu": 0.85,
+      "tiktok_cover": 0.6,
+      "ecommerce": 0.75,
+      "paid_ads": 0.85
+    },
+    "text_safe_zones": {
+      "has_existing_text": false,
+      "safe_zones": ["top", "right"],
+      "logo_placement_viable": true
+    },
+    "searchable_tags": {
+      "tags": ["minimalist", "luxury bag", "leather goods", "warm tones", "product photography", "fashion", "cream background", "soft lighting", "elegant", "premium brand", "editorial style", "neutral palette"]
+    },
+    "descriptions": {
+      "composition_desc": "产品居中放置在画面中央偏下，右上方留有大面积呼吸空间。45度角拍摄展现立体感，大理石台面增添质感层次。",
+      "lighting_desc": "柔和的漫射光从左侧上方照入，在包身形成细腻的渐变阴影，金属配件有含蓄的高光点缀。",
+      "color_mood_desc": "以米白和焦糖色为主调，整体色调温暖内敛。金色五金点缀提升奢华感，整体氛围优雅沉静，让人想要慢下来欣赏。",
+      "style_desc": "极简主义与低调奢华的完美结合。摒弃多余装饰，让产品本身的质感和工艺成为主角。专业商业摄影水准，适合高端品牌使用。",
+      "unique_elements": "大理石纹理与皮革质感的材质对话，以及恰到好处的负空间运用，让画面既有呼吸感又不失高级感。"
+    },
+    "generated_prompt": {
+      "prompt_en": "Professional product photography of a luxury quilted leather crossbody bag with gold hardware, elegant ¾ angle view centered composition, on cream marble surface with generous negative space in upper right, soft diffused lighting from upper left creating subtle gradient shadows on leather texture, warm neutral color palette of cream caramel and gold accents, minimalist luxury aesthetic with sophisticated serene mood, 8K ultra detailed sharp focus on texture and stitching",
+      "negative_prompt": "blurry, low quality, harsh shadows, oversaturated, cluttered background, amateur, text, watermark, distorted"
+    }
+  }
+}

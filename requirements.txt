@@ -1,0 +1,25 @@
+# === SCRAPING ===
+playwright==1.42.0
+pandas==2.2.1
+
+# === EMBEDDING PIPELINE ===
+torch>=2.0.0
+open-clip-torch>=2.24.0
+Pillow>=10.0.0
+aiohttp>=3.9.0
+tqdm>=4.66.0
+
+# === VECTOR DB ===
+supabase>=2.0.0
+python-dotenv>=1.0.0
+
+# === CLUSTERING & VISUALIZATION ===
+scikit-learn>=1.3.0
+umap-learn>=0.5.5
+matplotlib>=3.8.0
+plotly>=5.18.0
+
+# === API SERVER ===
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+httpx>=0.26.0
