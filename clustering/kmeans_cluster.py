@@ -7,10 +7,11 @@ sys.path.insert(0, str(__file__).rsplit("/", 2)[0])
 from embedding.config_embed import DEFAULT_K, K_CANDIDATES, CLUSTER_REPRESENTATIVES, CLUSTERS_JSON
 from vector_db.supabase_client import get_all_embeddings, batch_update_clusters
 
-def load_embeddings() -> tuple[list[str], np.ndarray, list[dict]]:  # Fetch embeddings from Supabase
+def load_embeddings(min_aesthetic: float = None) -> tuple[list[str], np.ndarray, list[dict]]:  # Fetch embeddings from Supabase
     import json
-    print("📂 Loading embeddings from Supabase...")
-    data = get_all_embeddings()
+    filter_msg = f" (aesthetic >= {min_aesthetic})" if min_aesthetic else ""
+    print(f"📂 Loading embeddings from Supabase{filter_msg}...")
+    data = get_all_embeddings(min_aesthetic=min_aesthetic)
     if not data: raise ValueError("No embeddings found in database")
     hashes = [d["content_hash"] for d in data]
     emb_list = []
@@ -59,8 +60,8 @@ def update_db_clusters(hashes: list[str], labels: np.ndarray):  # Update cluster
     success = batch_update_clusters(updates)
     print(f"   Updated {success}/{len(updates)} records")
 
-def run_clustering(k: int = DEFAULT_K, update_db: bool = True) -> list[dict]:  # Full clustering pipeline
-    hashes, embeddings, data = load_embeddings()
+def run_clustering(k: int = DEFAULT_K, update_db: bool = True, min_aesthetic: float = None) -> list[dict]:  # Full clustering pipeline
+    hashes, embeddings, data = load_embeddings(min_aesthetic=min_aesthetic)
     labels, centers = run_kmeans(embeddings, k)
     clusters = extract_representatives(hashes, embeddings, labels, centers, data)
     save_clusters(clusters)
@@ -72,8 +73,9 @@ def main():
     parser = argparse.ArgumentParser(description="K-means clustering")
     parser.add_argument("--k", type=int, default=DEFAULT_K, help=f"Number of clusters (default: {DEFAULT_K})")
     parser.add_argument("--no-db-update", action="store_true", help="Skip updating cluster_id in Supabase")
+    parser.add_argument("--min-aesthetic", type=float, default=None, help="Minimum Q-Align aesthetic score (e.g., 2.5)")
     args = parser.parse_args()
-    run_clustering(k=args.k, update_db=not args.no_db_update)
+    run_clustering(k=args.k, update_db=not args.no_db_update, min_aesthetic=args.min_aesthetic)
 
 if __name__ == "__main__":
     main()

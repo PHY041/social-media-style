@@ -38,7 +38,7 @@ def get_text_weight(title: str, alt_text: str) -> float: # Dynamic weight
 # === CLUSTERING ===
 DEFAULT_K = 120
 K_CANDIDATES = [80, 120, 160]
-CLUSTER_REPRESENTATIVES = 5
+CLUSTER_REPRESENTATIVES = 10
 
 # === Q-ALIGN (VLM) ===
 QALIGN_MODEL = "q-future/one-align"
@@ -51,7 +51,7 @@ QALIGN_SCORES_JSON = OUTPUT_DIR / "qalign_scores.json"
 STANFORD_ENDPOINT = "http://myth60.stanford.edu:9821/v1"
 STANFORD_API_KEY = "49bea0181c25e0808f7f000ff157bc76"
 STANFORD_MODEL = "Qwen/Qwen3-VL-8B-Instruct"
-VLM_MAX_TOKENS = 800
+VLM_MAX_TOKENS = 2000
 VLM_TEMPERATURE = 0.3
 
 # === VLM OUTPUTS ===

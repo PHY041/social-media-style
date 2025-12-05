@@ -46,14 +46,29 @@ def search_similar(embedding: list[float], limit: int = 20) -> list[dict]:  # KN
     result = get_client().rpc("match_embeddings", {"query_embedding": embedding, "match_count": limit}).execute()
     return result.data if result.data else []
 
-def get_all_embeddings(batch_size: int = 1000) -> list[dict]:  # Fetch all embeddings for clustering (paginated)
+def get_all_embeddings(batch_size: int = 500, min_aesthetic: float = None) -> list[dict]:  # Fetch all embeddings for clustering (paginated)
+    from tqdm import tqdm
     all_data, offset = [], 0
+    pbar = tqdm(desc="Fetching embeddings")
     while True:
-        result = get_client().table("image_embeddings").select("content_hash,embedding,category,category_type,image_url").range(offset, offset + batch_size - 1).execute()
-        if not result.data: break
-        all_data.extend(result.data)
-        if len(result.data) < batch_size: break
-        offset += batch_size
+        try:
+            query = get_client().table("image_embeddings").select("content_hash,embedding,category,category_type,image_url,qalign_aesthetic")
+            if min_aesthetic is not None:
+                query = query.gte("qalign_aesthetic", min_aesthetic)
+            result = query.range(offset, offset + batch_size - 1).execute()
+            if not result.data: break
+            all_data.extend(result.data)
+            pbar.update(len(result.data))
+            if len(result.data) < batch_size: break
+            offset += batch_size
+        except Exception as e:
+            print(f"\n⚠️ Error at offset {offset}: {e}")
+            if "timeout" in str(e).lower():
+                print("   Retrying with smaller batch...")
+                batch_size = max(100, batch_size // 2)
+                continue
+            break
+    pbar.close()
     return all_data
 
 def update_cluster_id(content_hash: str, cluster_id: int) -> bool:  # Update cluster assignment
