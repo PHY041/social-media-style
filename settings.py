@@ -70,6 +70,39 @@ SUPABASE_TABLE = "image_embeddings"
 CSV_COLUMNS = ["url", "pin_url", "category", "category_type", "search_term", "title", "alt_text", "saves", "comments", "engagement_score", "content_hash", "collected_at", "source"]
 
 # === VLM PROMPTS ===
+# V3: Image-to-Prompt (Hybrid GPT structure + Gemini natural descriptions)
+IMAGE_TO_PROMPT = """Convert this image into a detailed JSON prompt for image generation.
+
+RULES:
+- Return ONLY valid JSON, no markdown, no explanation
+- Describe colors in natural language (e.g., "deep matte maroon"), NO HEX codes
+- Capture small details like props, accessories, textures
+- For humans: describe skin texture detail (natural pores retained vs over-smoothed), exact cropping (what's visible/hidden), pose, expression, clothing with specific details
+- For products: describe shape, material, arrangement precisely
+
+OUTPUT STRUCTURE:
+{
+  "image_style": "one-line description of image type and style",
+  "canvas": {"aspect_ratio": "3:4|16:9|1:1|9:16|4:5", "orientation": "vertical|horizontal|square"},
+  "scene": {
+    "subject": {"type": "human|product|food|object|graphic", "description": "main subject", "details": {}},
+    "environment": {"setting": "studio|outdoor|indoor", "background": "...", "surface": "...", "props": []},
+    "lighting": {"type": "soft|hard|natural|studio", "direction": "...", "quality": "warm|cool", "shadow": "..."}
+  },
+  "composition": {"framing": "...", "camera_angle": "...", "focus": "...", "subject_position": "...", "negative_space": "..."},
+  "color_palette": {"dominant": ["natural language colors"], "accents": [], "tone": "warm|cool", "mood": "..."},
+  "typography": {"has_text": true|false, "text_content": {}, "font_style": "...", "placement": "..."},
+  "mood_keywords": ["5-8 atmospheric keywords"],
+  "intended_use": "what this image is best suited for"
+}
+
+Be specific. Capture unique visual qualities. Describe colors naturally like "deep matte maroon", "soft pastel pink"."""
+
+IMAGE_TO_PROMPT_COMPACT = """Convert image to JSON prompt. Return ONLY valid JSON:
+{"image_style":"...","canvas":{"aspect_ratio":"..."},"scene":{"subject":{"type":"...","description":"...","details":{}},"environment":{"background":"...","props":[]},"lighting":{"type":"...","shadow":"..."}},"composition":{"framing":"...","camera_angle":"..."},"color_palette":{"dominant":[],"tone":"..."},"mood_keywords":[],"intended_use":"..."}
+NO HEX colors. Capture props/details naturally."""
+
+# Legacy prompts (v2)
 STYLE_PROMPT = """You are a senior advertising art director analyzing high-quality commercial photography.
 Look at the image and return ONLY a valid JSON object (no markdown, no explanation):
 {

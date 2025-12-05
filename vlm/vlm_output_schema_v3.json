@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "version": "3.0",
+    "description": "Image-to-Prompt JSON Schema - Hybrid of GPT structure + Gemini natural descriptions",
+    "created_at": "2025-12-05",
+    "note": "Entire JSON is the prompt - no full_prompt_text needed"
+  },
+
+  "schema": {
+    "image_style": {
+      "type": "string",
+      "description": "One-line description of image type and style",
+      "example": "minimalist luxury skincare advertisement"
+    },
+
+    "canvas": {
+      "type": "object",
+      "description": "Image dimensions (VLM estimates from visual)",
+      "fields": {
+        "aspect_ratio": "string | 3:4, 16:9, 1:1, 9:16, 2:3, 4:5...",
+        "orientation": "string | vertical, horizontal, square"
+      }
+    },
+
+    "scene": {
+      "type": "object",
+      "description": "Main scene composition",
+      "fields": {
+        "subject": {
+          "type": "string | human, product, object, food, abstract, scene, graphic",
+          "description": "string | Natural language description of main subject",
+          "details": {
+            "_note": "Dynamic fields based on subject type",
+            "if_human": {
+              "anatomy": "string | Detailed description of visible body parts and cropping",
+              "body_visible": "array | face, neck, collarbone, hands, full_body...",
+              "cropping": "string | What's cropped out (e.g., 'face cropped above chin', 'waist down not visible')",
+              "pose": "string | Natural description of body position and gesture",
+              "expression": "string | Facial expression and emotional state if visible",
+              "skin": {
+                "texture": "string | Natural with visible pores, smooth retouched, matte, dewy...",
+                "tone": "string | Warm beige, cool ivory, deep brown, sun-kissed...",
+                "quality": "string | Natural with retained pore detail (not over-smoothed), studio-perfect, raw..."
+              },
+              "hair": "string | Style, color, texture (e.g., 'messy low ponytail with loose strands, light blonde')",
+              "clothing": "object | { top, bottom, accessories with natural descriptions }",
+              "accessories": "array | Jewelry, bags, hats with specific details"
+            },
+            "if_product": {
+              "shape": "string | cylindrical, rectangular, organic...",
+              "material": "string | matte cardboard, glossy glass, leather...",
+              "arrangement": "string | single, grouped, stacked, scattered...",
+              "branding": "object | { text, logo_visible, font_style... }"
+            },
+            "if_food": {
+              "dish_type": "string | salad bowl, plated dish, ingredients...",
+              "container": "string | pastel pink ceramic bowl...",
+              "ingredients": "array | list of visible ingredients",
+              "action": "string | pouring sauce, being served..."
+            }
+          }
+        },
+        "environment": {
+          "setting": "string | studio, cafe, bedroom, outdoor, abstract...",
+          "background": "string | Natural description of background",
+          "surface": "string | marble, wood, fabric... (if applicable)",
+          "props": "array | Small details like bottle, napkin, flowers..."
+        },
+        "lighting": {
+          "type": "string | soft diffused, hard shadow, natural daylight, studio directional...",
+          "direction": "string | from upper left, side, overhead, backlit...",
+          "quality": "string | warm, cool, dramatic, golden hour...",
+          "shadow": "string | soft gradient, hard cast shadow to right, minimal..."
+        }
+      }
+    },
+
+    "composition": {
+      "type": "object",
+      "description": "Framing and spatial arrangement",
+      "fields": {
+        "framing": "string | extreme close-up, medium shot, wide, full-body...",
+        "camera_angle": "string | eye level, overhead 45-degree, low angle, isometric...",
+        "focus": "string | sharp on subject, shallow depth of field, background blurred...",
+        "subject_position": "string | centered, rule of thirds, left side...",
+        "negative_space": "string | generous on upper right, minimal, balanced..."
+      }
+    },
+
+    "color_palette": {
+      "type": "object",
+      "description": "Colors in natural language (NO HEX codes)",
+      "fields": {
+        "dominant": "array | 2-4 main colors described naturally",
+        "accents": "array | 1-2 accent colors",
+        "tone": "string | warm, cool, neutral, mixed",
+        "mood": "string | muted, vibrant, pastel, earthy, monochrome..."
+      },
+      "examples": {
+        "dominant": ["deep matte maroon", "soft pastel pink", "sage green"],
+        "accents": ["gold trim", "cream highlights"],
+        "tone": "warm",
+        "mood": "earthy and sophisticated"
+      }
+    },
+
+    "typography": {
+      "type": "object",
+      "description": "Text elements if present (optional)",
+      "fields": {
+        "has_text": "boolean",
+        "text_content": "object | { main_text, tagline, subtext... }",
+        "font_style": "string | thin serif, bold sans-serif, brush calligraphy...",
+        "placement": "string | centered, top-left, overlaid on subject...",
+        "color": "string | soft white, gold..."
+      }
+    },
+
+    "graphic_elements": {
+      "type": "object",
+      "description": "For graphic design / illustration (optional)",
+      "fields": {
+        "layout_type": "string | grid-based, modular, freeform...",
+        "shapes": "array | geometric shapes, patterns, icons...",
+        "texture": "string | flat vector, grain, noise..."
+      }
+    },
+
+    "mood_keywords": {
+      "type": "array",
+      "description": "5-8 atmospheric keywords",
+      "example": ["organic", "tactile softness", "premium skincare aesthetic", "warm serenity"]
+    },
+
+    "intended_use": {
+      "type": "string",
+      "description": "What this image is best suited for",
+      "example": "high-end skincare campaign hero image"
+    }
+  },
+
+  "example_outputs": {
+    "skincare_ad": {
+      "image_style": "minimalist luxury skincare advertisement",
+      "canvas": {
+        "aspect_ratio": "3:4",
+        "orientation": "vertical"
+      },
+      "scene": {
+        "subject": {
+          "type": "human",
+          "description": "Extreme close-up of female neck, throat, and collarbone area",
+          "details": {
+            "anatomy": "Female neck, throat, and collarbone in extreme close-up",
+            "body_visible": ["neck", "collarbone", "shoulder", "partial throat"],
+            "cropping": "Face cropped above chin, body cropped below chest",
+            "skin": {
+              "texture": "Natural skin texture with visible pores retained, not over-smoothed",
+              "tone": "Warm beige with natural undertones",
+              "quality": "Raw and organic feel, subtle natural highlights on collarbone contours"
+            },
+            "clothing": {
+              "type": "white ribbed cotton tank top",
+              "placement": "thin strap partially visible on left shoulder, low neckline"
+            }
+          }
+        },
+        "environment": {
+          "setting": "indoor",
+          "background": "soft unfocused warm-toned interior"
+        },
+        "lighting": {
+          "type": "diffused natural light",
+          "direction": "from upper left",
+          "quality": "soft and warm",
+          "shadow": "gentle gradient on skin contours"
+        }
+      },
+      "composition": {
+        "framing": "tight close-up centered on collarbone",
+        "camera_angle": "slightly below eye level",
+        "focus": "sharp on skin texture and clavicle",
+        "negative_space": "background area above shoulder"
+      },
+      "color_palette": {
+        "dominant": ["warm beige", "soft ivory", "natural skin tones"],
+        "accents": ["soft white text"],
+        "tone": "warm",
+        "mood": "intimate and organic"
+      },
+      "typography": {
+        "has_text": true,
+        "text_content": {
+          "brand_name": "NURA",
+          "tagline": "SKINCARE"
+        },
+        "font_style": "thin serif with elegant spacing",
+        "placement": "centered on collarbone area",
+        "color": "soft white"
+      },
+      "mood_keywords": ["organic", "tactile softness", "femininity", "minimalism", "premium skincare aesthetic", "warm daylight serenity"],
+      "intended_use": "high-end skincare campaign hero image"
+    },
+
+    "product_packaging": {
+      "image_style": "premium product packaging mockup, minimalist and clean",
+      "canvas": {
+        "aspect_ratio": "4:3",
+        "orientation": "horizontal"
+      },
+      "scene": {
+        "subject": {
+          "type": "product",
+          "description": "Open shipping box containing three cylindrical cosmetic tubs",
+          "details": {
+            "shape": "rectangular cardboard box with open lid",
+            "material": "matte cardboard",
+            "arrangement": "three tubs laid horizontally in custom insert",
+            "branding": {
+              "text": "NOURISH YOUR HAIR. NOURISH YOUR CONFIDENCE",
+              "font_style": "elegant serif on inner lid"
+            },
+            "items": [
+              {"color": "deep maroon", "label": "BURRY BLISS", "position": "left"},
+              {"color": "soft pastel pink", "label": "BERRY BLOSSOM", "position": "center"},
+              {"color": "pale mint green", "label": "MINTY MOIST", "position": "right"}
+            ]
+          }
+        },
+        "environment": {
+          "setting": "studio",
+          "background": "solid warm beige",
+          "surface": "smooth matte flat surface"
+        },
+        "lighting": {
+          "type": "studio directional",
+          "direction": "top right at 45 degree angle",
+          "quality": "high contrast, clean",
+          "shadow": "hard-edged cast shadow toward bottom left, medium-strong"
+        }
+      },
+      "composition": {
+        "framing": "full product visible",
+        "camera_angle": "slightly elevated isometric angle",
+        "focus": "sharp on entire product and box",
+        "negative_space": "large beige area surrounding box"
+      },
+      "color_palette": {
+        "dominant": ["deep burgundy", "warm beige background"],
+        "accents": ["soft pink", "pale mint green", "white text"],
+        "tone": "warm",
+        "mood": "premium and sophisticated"
+      },
+      "mood_keywords": ["modern minimalism", "structured layout", "premium unboxing experience", "clean aesthetics", "pastel harmony"],
+      "intended_use": "e-commerce hero shot, brand packaging presentation"
+    },
+
+    "food_photography": {
+      "image_style": "bright lifestyle food photography, vibrant colors",
+      "canvas": {
+        "aspect_ratio": "4:5",
+        "orientation": "vertical"
+      },
+      "scene": {
+        "subject": {
+          "type": "food",
+          "description": "Vibrant taco salad bowl with sauce being poured",
+          "details": {
+            "dish_type": "Buddha bowl / taco salad",
+            "container": "smooth pastel pink ceramic bowl",
+            "ingredients": ["grilled corn segment", "purple cabbage shreds", "fresh lettuce", "tortilla strips", "cherry tomatoes", "edible blue flower"],
+            "action": "hand pouring amber dressing from small teal pitcher"
+          }
+        },
+        "environment": {
+          "setting": "styled tabletop",
+          "background": "solid pastel turquoise wall",
+          "surface": "light beige textured tablecloth",
+          "props": ["glass swing-top bottle with orange sauce", "wooden board with tortilla chips in bottom left", "small teal dipping bowl", "white napkin with cactus pattern"]
+        },
+        "lighting": {
+          "type": "harsh natural sunlight",
+          "direction": "from side",
+          "quality": "bright and energetic",
+          "shadow": "sharp distinct hard shadows"
+        }
+      },
+      "composition": {
+        "framing": "close-up food shot centered on bowl",
+        "camera_angle": "slightly overhead 45-degree",
+        "focus": "sharp on bowl and pouring sauce",
+        "subject_position": "centered"
+      },
+      "color_palette": {
+        "dominant": ["pastel pink bowl", "mint blue background", "vibrant orange sauce"],
+        "accents": ["fresh greens", "purple cabbage"],
+        "tone": "cool background with warm food tones",
+        "mood": "fresh, summer, energetic"
+      },
+      "mood_keywords": ["healthy eating", "fresh ingredients", "vibrant lifestyle", "summer salad", "modern food styling"],
+      "intended_use": "food advertising, social media content, restaurant marketing"
+    }
+  }
+}
