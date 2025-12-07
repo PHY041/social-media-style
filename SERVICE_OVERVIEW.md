@@ -159,6 +159,24 @@ vector_db/
 
 ## 🔮 下一步
 
-1. **同步 V3 Prompts 到 Supabase** — 需要添加 `vlm_prompt JSONB` 列
-2. **API 服务** — 对外暴露搜索和 Prompt 获取接口
-3. **Prompt 学习** — 用现有 1,648 个 prompt-image pairs 训练模型
+1. **集成到 MCP Content Gen** — 使用 `api/style_service.py`
+
+---
+
+## 🔗 API 服务 (已完成)
+
+详见 `api/README.md`
+
+```python
+from api.style_service import generate_prompt
+
+result = generate_prompt(
+    brand={"name": "...", "industry": "fashion", ...},
+    campaign={"theme": "...", "batch_goal": "..."},
+    request={"content_type": "hero_shot", "product_description": "...", "goal": "luxury"}
+)
+
+fal_prompt = result["fal_prompt"]
+reference_images = result["style_reference"]["reference_images"]
+```
+
